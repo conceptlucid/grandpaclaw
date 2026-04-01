@@ -11,10 +11,18 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install Swift 6.2
+        run: |
+          mkdir -p $HOME/swift
+          curl -L -o $HOME/swift.tar.gz https://download.swift.org/swift-6.2.0-RELEASE/swift-6.2.0-RELEASE-osx_arm64.tar.gz
+          tar -xzf $HOME/swift.tar.gz -C $HOME/swift
+          echo "$HOME/swift/swift-6.2.0-RELEASE-osx_arm64/usr/bin" >> $GITHUB_PATH
+          swift --version
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -27,15 +35,10 @@ jobs:
       - name: Get pnpm dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Clean SPM cache
-        run: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          rm -rf ~/Library/Caches/org.swift.swiftpm
-
       - name: Build macOS app
         run: |
           cd apps/macos
-          xcodebuild -scheme GrandpaClaw -configuration Release -derivedDataPath build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO -clonedSourcePackagesDirPath="$HOME/Library/Developer/Xcode/DerivedData" 2>&1 | tail -50
+          xcodebuild -scheme GrandpaClaw -configuration Release -derivedDataPath build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO SWIFT_EXEC="$HOME/swift/swift-6.2.0-RELEASE-osx_arm64/usr/bin/swift" 2>&1 | tail -50
 
       - name: Find built app
         run: |
