@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawIPC
+import GrandpaClawIPC
 
 enum ShellExecutor {
     struct ShellResult {

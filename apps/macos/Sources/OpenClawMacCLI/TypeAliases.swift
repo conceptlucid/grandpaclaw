@@ -1,5 +1,5 @@
-import OpenClawKit
-import OpenClawProtocol
+import GrandpaClawKit
+import GrandpaClawProtocol
 
-typealias ProtoAnyCodable = OpenClawProtocol.AnyCodable
-typealias KitAnyCodable = OpenClawKit.AnyCodable
+typealias ProtoAnyCodable = GrandpaClawProtocol.AnyCodable
+typealias KitAnyCodable = GrandpaClawKit.AnyCodable

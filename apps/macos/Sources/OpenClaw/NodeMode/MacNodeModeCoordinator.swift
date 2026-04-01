@@ -1,12 +1,12 @@
 import Foundation
-import OpenClawKit
+import GrandpaClawKit
 import OSLog
 
 @MainActor
 final class MacNodeModeCoordinator {
     static let shared = MacNodeModeCoordinator()
 
-    private let logger = Logger(subsystem: "ai.openclaw", category: "mac-node")
+    private let logger = Logger(subsystem: "ai.grandpaclaw", category: "mac-node")
     private var task: Task<Void, Never>?
     private let runtime = MacNodeRuntime()
     private let session = GatewayNodeSession()
@@ -49,7 +49,7 @@ final class MacNodeModeCoordinator {
                 await self.session.disconnect()
                 try? await Task.sleep(nanoseconds: 200_000_000)
             }
-            let browserControlEnabled = OpenClawConfigFile.browserControlEnabled()
+            let browserControlEnabled = GrandpaClawConfigFile.browserControlEnabled()
             if lastBrowserControlEnabled == nil {
                 lastBrowserControlEnabled = browserControlEnabled
             } else if lastBrowserControlEnabled != browserControlEnabled {
@@ -69,7 +69,7 @@ final class MacNodeModeCoordinator {
                     caps: caps,
                     commands: commands,
                     permissions: permissions,
-                    clientId: "openclaw-macos",
+                    clientId: "grandpaclaw-macos",
                     clientMode: "node",
                     clientDisplayName: InstanceIdentity.displayName)
                 let sessionBox = self.buildSessionBox(url: config.url)
@@ -101,7 +101,7 @@ final class MacNodeModeCoordinator {
                             return BridgeInvokeResponse(
                                 id: req.id,
                                 ok: false,
-                                error: OpenClawNodeError(code: .unavailable, message: "UNAVAILABLE: node not ready"))
+                                error: GrandpaClawNodeError(code: .unavailable, message: "UNAVAILABLE: node not ready"))
                         }
                         return await self.runtime.handleInvoke(req)
                     })
@@ -117,16 +117,16 @@ final class MacNodeModeCoordinator {
     }
 
     private func currentCaps() -> [String] {
-        var caps: [String] = [OpenClawCapability.canvas.rawValue, OpenClawCapability.screen.rawValue]
-        if OpenClawConfigFile.browserControlEnabled() {
-            caps.append(OpenClawCapability.browser.rawValue)
+        var caps: [String] = [GrandpaClawCapability.canvas.rawValue, GrandpaClawCapability.screen.rawValue]
+        if GrandpaClawConfigFile.browserControlEnabled() {
+            caps.append(GrandpaClawCapability.browser.rawValue)
         }
         if UserDefaults.standard.object(forKey: cameraEnabledKey) as? Bool ?? false {
-            caps.append(OpenClawCapability.camera.rawValue)
+            caps.append(GrandpaClawCapability.camera.rawValue)
         }
         let rawLocationMode = UserDefaults.standard.string(forKey: locationModeKey) ?? "off"
-        if OpenClawLocationMode(rawValue: rawLocationMode) != .off {
-            caps.append(OpenClawCapability.location.rawValue)
+        if GrandpaClawLocationMode(rawValue: rawLocationMode) != .off {
+            caps.append(GrandpaClawCapability.location.rawValue)
         }
         return caps
     }
@@ -138,33 +138,33 @@ final class MacNodeModeCoordinator {
 
     private func currentCommands(caps: [String]) -> [String] {
         var commands: [String] = [
-            OpenClawCanvasCommand.present.rawValue,
-            OpenClawCanvasCommand.hide.rawValue,
-            OpenClawCanvasCommand.navigate.rawValue,
-            OpenClawCanvasCommand.evalJS.rawValue,
-            OpenClawCanvasCommand.snapshot.rawValue,
-            OpenClawCanvasA2UICommand.push.rawValue,
-            OpenClawCanvasA2UICommand.pushJSONL.rawValue,
-            OpenClawCanvasA2UICommand.reset.rawValue,
+            GrandpaClawCanvasCommand.present.rawValue,
+            GrandpaClawCanvasCommand.hide.rawValue,
+            GrandpaClawCanvasCommand.navigate.rawValue,
+            GrandpaClawCanvasCommand.evalJS.rawValue,
+            GrandpaClawCanvasCommand.snapshot.rawValue,
+            GrandpaClawCanvasA2UICommand.push.rawValue,
+            GrandpaClawCanvasA2UICommand.pushJSONL.rawValue,
+            GrandpaClawCanvasA2UICommand.reset.rawValue,
             MacNodeScreenCommand.record.rawValue,
-            OpenClawSystemCommand.notify.rawValue,
-            OpenClawSystemCommand.which.rawValue,
-            OpenClawSystemCommand.run.rawValue,
-            OpenClawSystemCommand.execApprovalsGet.rawValue,
-            OpenClawSystemCommand.execApprovalsSet.rawValue,
+            GrandpaClawSystemCommand.notify.rawValue,
+            GrandpaClawSystemCommand.which.rawValue,
+            GrandpaClawSystemCommand.run.rawValue,
+            GrandpaClawSystemCommand.execApprovalsGet.rawValue,
+            GrandpaClawSystemCommand.execApprovalsSet.rawValue,
         ]
 
         let capsSet = Set(caps)
-        if capsSet.contains(OpenClawCapability.browser.rawValue) {
-            commands.append(OpenClawBrowserCommand.proxy.rawValue)
+        if capsSet.contains(GrandpaClawCapability.browser.rawValue) {
+            commands.append(GrandpaClawBrowserCommand.proxy.rawValue)
         }
-        if capsSet.contains(OpenClawCapability.camera.rawValue) {
-            commands.append(OpenClawCameraCommand.list.rawValue)
-            commands.append(OpenClawCameraCommand.snap.rawValue)
-            commands.append(OpenClawCameraCommand.clip.rawValue)
+        if capsSet.contains(GrandpaClawCapability.camera.rawValue) {
+            commands.append(GrandpaClawCameraCommand.list.rawValue)
+            commands.append(GrandpaClawCameraCommand.snap.rawValue)
+            commands.append(GrandpaClawCameraCommand.clip.rawValue)
         }
-        if capsSet.contains(OpenClawCapability.location.rawValue) {
-            commands.append(OpenClawLocationCommand.get.rawValue)
+        if capsSet.contains(GrandpaClawCapability.location.rawValue) {
+            commands.append(GrandpaClawLocationCommand.get.rawValue)
         }
 
         return commands

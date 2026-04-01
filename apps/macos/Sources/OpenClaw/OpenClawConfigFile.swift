@@ -1,22 +1,22 @@
 import CryptoKit
 import Foundation
-import OpenClawProtocol
+import GrandpaClawProtocol
 
-enum OpenClawConfigFile {
-    private static let logger = Logger(subsystem: "ai.openclaw", category: "config")
+enum GrandpaClawConfigFile {
+    private static let logger = Logger(subsystem: "ai.grandpaclaw", category: "config")
     private static let configAuditFileName = "config-audit.jsonl"
     private static let configHealthFileName = "config-health.json"
 
     static func url() -> URL {
-        OpenClawPaths.configURL
+        GrandpaClawPaths.configURL
     }
 
     static func stateDirURL() -> URL {
-        OpenClawPaths.stateDirURL
+        GrandpaClawPaths.stateDirURL
     }
 
     static func defaultWorkspaceURL() -> URL {
-        OpenClawPaths.workspaceURL
+        GrandpaClawPaths.workspaceURL
     }
 
     static func loadDict() -> [String: Any] {
@@ -533,7 +533,7 @@ enum OpenClawConfigFile {
     private static func appendConfigWriteAudit(_ fields: [String: Any]) {
         var record: [String: Any] = [
             "ts": ISO8601DateFormatter().string(from: Date()),
-            "source": "macos-openclaw-config-file",
+            "source": "macos-grandpaclaw-config-file",
             "event": "config.write",
             "pid": ProcessInfo.processInfo.processIdentifier,
             "argv": Array(ProcessInfo.processInfo.arguments.prefix(8)),
@@ -569,7 +569,7 @@ enum OpenClawConfigFile {
     private static func appendConfigObserveAudit(_ fields: [String: Any]) {
         var record: [String: Any] = [
             "ts": ISO8601DateFormatter().string(from: Date()),
-            "source": "macos-openclaw-config-file",
+            "source": "macos-grandpaclaw-config-file",
             "event": "config.observe",
             "pid": ProcessInfo.processInfo.processIdentifier,
             "argv": Array(ProcessInfo.processInfo.arguments.prefix(8)),

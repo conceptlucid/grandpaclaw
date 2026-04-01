@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import GrandpaClawProtocol
 
 extension CronSettings {
     func save(payload: [String: AnyCodable]) async {
