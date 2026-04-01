@@ -13,10 +13,6 @@ concurrency:
   group: build-macos-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  NODE_VERSION: "24.x"
-  PNPM_VERSION: "10.23.0"
-
 jobs:
   build-macos:
     runs-on: macos-latest
@@ -33,12 +29,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: "24.x"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - name: Get pnpm dependencies
         run: pnpm install --frozen-lockfile
