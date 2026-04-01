@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build-macos:
-    runs-on: macos-15
+    runs-on: macos-13
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
       - name: Build macOS app
         run: |
           cd apps/macos
-          xcodebuild -scheme GrandpaClaw -configuration Release -derivedDataPath build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO -clonedSourcePackagesDirPath="$HOME/Library/Developer/Xcode/DerivedData" 2>&1 | tail -30
+          xcodebuild -scheme GrandpaClaw -configuration Release -derivedDataPath build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO -clonedSourcePackagesDirPath="$HOME/Library/Developer/Xcode/DerivedData" 2>&1 | tail -50
 
       - name: Find built app
         run: |
@@ -65,13 +65,3 @@ jobs:
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  notify:
-    needs: build-macos
-    runs-on: ubuntu-latest
-    steps:
-      - name: Success
-        run: |
-          echo "## GrandpaClaw Mac App Built Successfully!"
-          echo "Version: ${{ inputs.version }}"
-          echo "Download the .zip from the release artifacts."
