@@ -9,10 +9,6 @@ on:
         default: '1.0.0'
         type: string
 
-concurrency:
-  group: build-macos-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   build-macos:
     runs-on: macos-13
