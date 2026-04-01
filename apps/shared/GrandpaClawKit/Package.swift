@@ -17,13 +17,13 @@ let package = Package(
     targets: [
         .target(
             name: "GrandpaClawProtocol",
-            path: "GrandpaClawProtocol"),
+            path: "Sources/GrandpaClawProtocol"),
         .target(
             name: "GrandpaClawKit",
             dependencies: [
                 "GrandpaClawProtocol",
             ],
-            path: "GrandpaClawKitModule",
+            path: "Sources/GrandpaClawKitModule",
             resources: [
                 .process("Resources"),
             ]),
@@ -32,5 +32,5 @@ let package = Package(
             dependencies: [
                 "GrandpaClawKit",
             ],
-            path: "GrandpaClawChatUI"),
+            path: "Sources/GrandpaClawChatUI"),
     ])
