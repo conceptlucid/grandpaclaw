@@ -1,0 +1,89 @@
+name: Build GrandpaClaw Mac App
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+        type: string
+
+concurrency:
+  group: build-macos-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "24.x"
+  PNPM_VERSION: "10.23.0"
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            apps/macos
+            package.json
+            pnpm-lock.yaml
+          sparse-checkout-cone-mode: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Get pnpm dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build macOS app
+        run: |
+          cd apps/macos
+          xcodebuild -scheme GrandpaClaw -configuration Release -derivedDataPath build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO 2>&1 | tail -20
+
+      - name: Find built app
+        run: |
+          find apps/macos/build -name "GrandpaClaw.app" -type d
+
+      - name: Package app
+        run: |
+          cd apps/macos/build
+          APP_PATH=$(find . -name "GrandpaClaw.app" -type d | head -1)
+          echo "App path: $APP_PATH"
+          cd "$(dirname "$APP_PATH")"
+          zip -r "GrandpaClaw-${{ inputs.version }}.zip" "$(basename "$APP_PATH")"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GrandpaClaw-mac-${{ inputs.version }}
+          path: apps/macos/build/**/*.zip
+          retention-days: 30
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.version }}
+          release_name: GrandpaClaw v${{ inputs.version }}
+          artifact_path: apps/macos/build/**/*.zip
+          generate_release_notes: true
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    needs: build-macos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success
+        run: |
+          echo "## GrandpaClaw Mac App Built Successfully!"
+          echo "Version: ${{ inputs.version }}"
+          echo "Download the .zip from the release artifacts."
