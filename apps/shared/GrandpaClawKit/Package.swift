@@ -14,7 +14,7 @@ let package = Package(
         .library(name: "GrandpaClawChatUI", targets: ["GrandpaClawChatUI"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/gonzalezreal/textual", exact: "0.3.1"),
+        .package(url: "https://github.com/gonzalezreal/textual", exact: "0.2.1"),
     ],
     targets: [
         .target(
