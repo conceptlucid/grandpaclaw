@@ -20,7 +20,7 @@ public enum TalkConfigParsing {
     public static func selectProviderConfig(
         _ talk: [String: AnyCodable]?,
         defaultProvider: String,
-        allowLegacyFallback: Bool = true,
+        allowLegacyFallback: Bool = true
     ) -> TalkProviderConfigSelection? {
         guard let talk = talk else { return nil }
         if let resolvedSelection = self.resolvedProviderConfig(talk) {
