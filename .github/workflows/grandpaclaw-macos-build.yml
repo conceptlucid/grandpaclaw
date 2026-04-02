@@ -16,14 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Swift 6.2
-        run: |
-          mkdir -p $HOME/swift
-          curl -L -o $HOME/swift.tar.gz https://download.swift.org/swift-6.2.0-RELEASE/swift-6.2.0-RELEASE-osx_arm64.tar.gz
-          tar -xzf $HOME/swift.tar.gz -C $HOME/swift
-          echo "$HOME/swift/swift-6.2.0-RELEASE-osx_arm64/usr/bin" >> $GITHUB_PATH
-          swift --version
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
