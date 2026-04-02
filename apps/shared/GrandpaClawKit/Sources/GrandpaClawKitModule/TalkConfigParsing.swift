@@ -22,7 +22,7 @@ public enum TalkConfigParsing {
         defaultProvider: String,
         allowLegacyFallback: Bool = true,
     ) -> TalkProviderConfigSelection? {
-        guard let talk else { return nil }
+        guard let talk = talk else { return nil }
         if let resolvedSelection = self.resolvedProviderConfig(talk) {
             return resolvedSelection
         }

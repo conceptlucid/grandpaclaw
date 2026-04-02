@@ -54,7 +54,7 @@ public final class TalkSystemSpeechSynthesizer: NSObject {
         let estimatedSeconds = max(3.0, min(180.0, Double(trimmed.count) * 0.08))
         self.watchdog?.cancel()
         self.watchdog = Task { @MainActor [weak self] in
-            guard let self else { return }
+            guard let self = self else { return }
             try? await Task.sleep(nanoseconds: UInt64(estimatedSeconds * 1_000_000_000))
             if Task.isCancelled { return }
             guard self.currentToken == token else { return }

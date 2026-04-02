@@ -79,12 +79,12 @@ public struct GatewayConnectAuthError: LocalizedError, Sendable {
     public var recommendedNextStepCode: String? { self.recommendedNextStepRaw }
 
     public var detail: GatewayConnectAuthDetailCode? {
-        guard let detailCodeRaw else { return nil }
+        guard let detailCodeRaw = detailCodeRaw else { return nil }
         return GatewayConnectAuthDetailCode(rawValue: detailCodeRaw)
     }
 
     public var recommendedNextStep: GatewayConnectRecoveryNextStep? {
-        guard let recommendedNextStepRaw else { return nil }
+        guard let recommendedNextStepRaw = recommendedNextStepRaw else { return nil }
         return GatewayConnectRecoveryNextStep(rawValue: recommendedNextStepRaw)
     }
 

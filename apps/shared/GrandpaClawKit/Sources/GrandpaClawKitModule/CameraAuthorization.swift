@@ -7,7 +7,7 @@ public enum CameraAuthorization {
         case .authorized:
             return true
         case .notDetermined:
-            return await withCheckedContinuation(isolation: nil) { cont in
+            return await withCheckedContinuation { cont in
                 AVCaptureDevice.requestAccess(for: mediaType) { granted in
                     cont.resume(returning: granted)
                 }

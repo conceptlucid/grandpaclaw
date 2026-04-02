@@ -404,7 +404,7 @@ public actor GatewayNodeSession {
         return await withCheckedContinuation { cont in
             self.snapshotWaiters.append(cont)
             Task { [weak self] in
-                guard let self else { return }
+                guard let self = self else { return }
                 try? await Task.sleep(nanoseconds: UInt64(clamped) * 1_000_000)
                 await self.timeoutSnapshotWaiters()
             }

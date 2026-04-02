@@ -259,7 +259,7 @@ public actor GatewayChannelActor {
     private func startWatchdog() {
         self.watchdogTask?.cancel()
         self.watchdogTask = Task { [weak self] in
-            guard let self else { return }
+            guard let self = self else { return }
             await self.watchdogLoop()
         }
     }
@@ -346,7 +346,7 @@ public actor GatewayChannelActor {
     private func startKeepalive() {
         self.keepaliveTask?.cancel()
         self.keepaliveTask = Task { [weak self] in
-            guard let self else { return }
+            guard let self = self else { return }
             await self.keepaliveLoop()
         }
     }
@@ -588,7 +588,7 @@ public actor GatewayChannelActor {
         self.lastTick = Date()
         self.tickTask?.cancel()
         self.tickTask = Task { [weak self] in
-            guard let self else { return }
+            guard let self = self else { return }
             await self.watchTicks()
         }
         if let pushHandler = self.pushHandler {
@@ -598,7 +598,7 @@ public actor GatewayChannelActor {
 
     private func listen() {
         self.task?.receive { [weak self] result in
-            guard let self else { return }
+            guard let self = self else { return }
             switch result {
             case let .failure(err):
                 Task { await self.handleReceiveFailure(err) }
@@ -628,7 +628,7 @@ public actor GatewayChannelActor {
         case let .string(s): s.data(using: .utf8)
         @unknown default: nil
         }
-        guard let data else { return }
+        guard let data = data else { return }
         guard let frame = try? self.decoder.decode(GatewayFrame.self, from: data) else {
             self.logger.error("gateway decode failed")
             return
@@ -834,7 +834,7 @@ public actor GatewayChannelActor {
         let response = try await withCheckedThrowingContinuation { (cont: CheckedContinuation<GatewayFrame, Error>) in
             self.pending[payload.id] = cont
             Task { [weak self] in
-                guard let self else { return }
+                guard let self = self else { return }
                 try? await Task.sleep(nanoseconds: UInt64(effectiveTimeout * 1_000_000))
                 await self.timeoutRequest(id: payload.id, timeoutMs: effectiveTimeout)
             }
@@ -848,7 +848,7 @@ public actor GatewayChannelActor {
                     self.connected = false
                     self.task?.cancel(with: .goingAway, reason: nil)
                     Task { [weak self] in
-                        guard let self else { return }
+                        guard let self = self else { return }
                         await self.scheduleReconnect()
                     }
                     if let waiter { waiter.resume(throwing: wrapped) }
@@ -889,7 +889,7 @@ public actor GatewayChannelActor {
             self.connected = false
             self.task?.cancel(with: .goingAway, reason: nil)
             Task { [weak self] in
-                guard let self else { return }
+                guard let self = self else { return }
                 await self.scheduleReconnect()
             }
             throw wrapped

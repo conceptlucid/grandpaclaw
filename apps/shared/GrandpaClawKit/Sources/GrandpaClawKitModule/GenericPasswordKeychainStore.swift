@@ -58,7 +58,7 @@ public enum GenericPasswordKeychainStore {
         }
 
         // Best-effort rollback: preserve prior value if replacement fails.
-        guard let previousData else { return false }
+        guard let previousData = previousData else { return false }
         var rollback = query
         rollback[kSecValueData as String] = previousData
         rollback[kSecAttrAccessible as String] = accessible

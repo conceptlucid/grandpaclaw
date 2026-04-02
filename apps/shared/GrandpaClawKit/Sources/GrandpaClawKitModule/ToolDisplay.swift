@@ -242,7 +242,7 @@ public enum ToolDisplayRegistry {
     }
 
     private static func valueForKeyPath(_ args: AnyCodable?, path: String) -> Any? {
-        guard let args else { return nil }
+        guard let args = args else { return nil }
         let parts = path.split(separator: ".").map(String.init)
         var current: Any? = args.value
         for part in parts {
