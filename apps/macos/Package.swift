@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "GrandpaClaw",
     platforms: [
-        .macOS(.v12),
+        .macOS(.v13),
     ],
     products: [
         .executable(name: "GrandpaClaw", targets: ["GrandpaClaw"]),

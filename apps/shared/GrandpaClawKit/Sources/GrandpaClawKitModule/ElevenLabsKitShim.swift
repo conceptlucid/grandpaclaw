@@ -1,6 +1,8 @@
 // MARK: - ElevenLabsKit Stub for Swift 5.9 compatibility
 // The actual ElevenLabsKit requires Swift 6.2, so we stub it out for now
 
+import Foundation
+
 public enum ElevenLabsKit {
     public struct ElevenLabsVoice: Codable, Sendable {
         public let id: String

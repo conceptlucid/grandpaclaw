@@ -6,7 +6,7 @@ let package = Package(
     name: "GrandpaClawKit",
     platforms: [
         .iOS(.v16),
-        .macOS(.v12),
+        .macOS(.v13),
     ],
     products: [
         .library(name: "GrandpaClawProtocol", targets: ["GrandpaClawProtocol"]),
