@@ -13,7 +13,9 @@ let package = Package(
         .library(name: "GrandpaClawKit", targets: ["GrandpaClawKit"]),
         .library(name: "GrandpaClawChatUI", targets: ["GrandpaClawChatUI"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/gonzalezreal/textual", exact: "0.3.1"),
+    ],
     targets: [
         .target(
             name: "GrandpaClawProtocol",
@@ -31,6 +33,7 @@ let package = Package(
             name: "GrandpaClawChatUI",
             dependencies: [
                 "GrandpaClawKit",
+                .product(name: "Textual", package: "textual"),
             ],
             path: "Sources/GrandpaClawChatUI"),
     ])
